@@ -52,7 +52,7 @@ def read_file(path: str):
 read_file_tool = StructuredTool.from_function(
     read_file,
     name="read_file",
-    description="Read a file in the text editor workspace.",
+    description="Read a text file from the user's workspace. ",
 )
 
 def propose_file_change(file_path: str, original_content: str, proposed_content: str, description: str):

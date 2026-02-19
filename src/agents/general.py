@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from src.chains.router import chain as router_chain
 from src.chains.executer import chain as executor_chain
 from src.chains.planner import chain as planner_chain
+from src.prompts.base import get_reference_files_prompt
 
 load_dotenv()
 
@@ -24,26 +25,19 @@ class Message(BaseModel):
 
 class Request(BaseModel):
     messages: list[Message]
-    new_message: Message
     mode: str = "execute" # "plan" or "execute" or "auto"
     special_instructions: str | None = None
+    reference_files: list[str] | None = None
 
 @chain
 async def general_agent(req: dict):
-    print("\n/Request Mode/")
-    
     try:
         if isinstance(req, dict):
             req = Request(**req)
 
-        print("\n/New Message/")
-        print(req.new_message)
-        print(req.mode)
-        print(req.special_instructions)
-
         # 1. Reconstruct History
         input_messages = []
-        for msg in (req.messages + [req.new_message]):
+        for msg in req.messages:
             match msg.type:
                 case "human":
                     input_messages.append(HumanMessage(content=msg.content or ""))
@@ -59,24 +53,19 @@ async def general_agent(req: dict):
                     input_messages.append(AIMessage(content="", tool_calls=[msg.tool]))
 
         special_instructions = req.special_instructions or "No user constraints provided."
-        print("Special Instructions:")
-        print(special_instructions)
 
+        # 1.5. Add Reference Files
+        input_messages[-1].content = f"{input_messages[-1].content}\n{get_reference_files_prompt(req.reference_files)}"
+        
         # 2. Determine Mode
         mode = req.mode
         if mode == "auto":
-            print("Routing Request...")
             router_response = await router_chain.ainvoke({"messages": input_messages, "special_instructions": special_instructions})
             mode = router_response.content.strip().lower()
-            print(f"Router decided: {mode}")
 
         # 3. Plan Mode
-        if "execute" not in mode: # execute not in makes more likely to execute
-            print(f"Planning...")
+        if "execute" not in mode:
             response = await planner_chain.ainvoke({"messages": input_messages, "special_instructions": special_instructions})
-            # Planner just talks
-            print("\n/Planner Response/")
-            print(response.content)
             return {
                 "message": {
                     "type": "assistant",
@@ -86,11 +75,7 @@ async def general_agent(req: dict):
             }
         
         else: # Default to execute
-            print(f"Executing Step...")
             response = await executor_chain.ainvoke({"messages": input_messages, "special_instructions": special_instructions})
-
-            print("\n/Executor Response/")
-            print(response.content)
             
             # Execute Step Logic
             if response.tool_calls:
