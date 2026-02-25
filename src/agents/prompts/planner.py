@@ -1,5 +1,5 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from src.prompts.base import get_system_prompt
+from src.agents.prompts.base import get_system_prompt
 
 PLANNER_CORE_PROMPT = """
 You are an expert Software Architect and Knowledge Worker.

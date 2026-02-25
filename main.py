@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI
 from langserve import add_routes
-from src.agents.general import general_agent
+from src.api.resources.agent.server_chain import chain as agent_chain
 
 app = FastAPI(
     title="LangChain Server",
@@ -11,8 +11,8 @@ app = FastAPI(
 
 add_routes(
     app,
-    general_agent,
-    path="/general_agent",
+    agent_chain,
+    path="/agent",
 )
 
 if __name__ == "__main__":

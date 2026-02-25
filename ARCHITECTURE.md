@@ -9,7 +9,7 @@ This project implements an AI assistant where the **Brain (Inference)** is decou
 
 ---
 
-## 1. The Python Server (`src/agents/general.py`)
+## 1. The Python Server (`src/agents/orchestrator.py`)
 
 **What it IS:**
 *   A **Stateless Inference Endpoint**.
@@ -28,12 +28,12 @@ This project implements an AI assistant where the **Brain (Inference)** is decou
     *   `mode`: `"plan"`, `"execute"`, or `"auto"` (default).
     *   `special_instructions`: Optional constraints.
 
-2.  **Processing** (`src/agents/general.py`):
+2.  **Processing** (`src/agents/orchestrator.py`):
     *   **Reconstruct History**: Converts raw JSON into LangChain Message objects.
     *   **Determine Mode**:
-        *   **If Mode = "auto"**: Uses `src/chains/router.py` to classify intent as `"PLAN"` or `"EXECUTE"`.
-        *   **If Mode = "plan"**: Invokes `src/chains/planner.py` to generate a structured plan.
-        *   **If Mode = "execute"**: Invokes `src/chains/executer.py` to generate a tool call or final response.
+        *   **If Mode = "auto"**: Uses `src/agents/chains/router.py` to classify intent as `"PLAN"` or `"EXECUTE"`.
+        *   **If Mode = "plan"**: Invokes `src/agents/chains/planner.py` to generate a structured plan.
+        *   **If Mode = "execute"**: Invokes `src/agents/chains/executer.py` to generate a tool call or final response.
 
 3.  **Output**: Returns **ONE** of:
     *   `text`: The Plan (in plan mode) or a conversational response.

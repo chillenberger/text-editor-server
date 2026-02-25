@@ -26,11 +26,16 @@ This project serves as the **Python Server ("Brain")** for a "Split-Brain" AI as
 
 #### 🧠 Agents (`src/agents/`)
 *The main entry points for different agent behaviors.*
-- **`general.py`**: The primary `general_agent` implementation.
+- **`orchestrator.py`**: The primary `agent_controller` implementation.
     -   **Role**: The "Orchestrator".
-    -   **Flow**: Reconstructs state -> Routes request -> Invokes Chain -> Returns Response.
+    -   **Flow**: Decides mode via router -> invokes planner or executor -> returns final response format.
 
-#### 🔗 Chains (`src/chains/`)
+#### 🌐 API (`src/api/`)
+*The REST API boundary.*
+- **`resources/agent/validator.py`**: Handles incoming request validation using Pydantic and converts them into LangChain message formats.
+- **`resources/agent/server_chain.py`**: Connects the message validator to the LangChain orchestrator.
+
+#### 🔗 Chains (`src/agents/chains/`)
 *Specialized "Micro-Brains" for specific cognitive tasks.*
 - **`router.py`**: A classifier chain.
     -   **Input**: Conversation History.
@@ -44,14 +49,14 @@ This project serves as the **Python Server ("Brain")** for a "Split-Brain" AI as
     -   **Output**: A **Tool Call** (to modify files) or a final answer.
     -   **Tools**: Has access to `client_tools`.
 
-#### 📝 Prompts (`src/prompts/`)
+#### 📝 Prompts (`src/agents/prompts/`)
 *Prompt templates for the chains.*
 - **`base.py`**: Base prompt templates and system messages.
 - **`router.py`**: Prompts for the router chain.
 - **`planner.py`**: Prompts for the planner chain.
 - **`executer.py`**: Prompts for the executor chain.
 
-#### 🛠 Tools (`src/tools/`)
+#### 🛠 Tools (`src/agents/tools/`)
 *Interface definitions for Client capabilities.*
 - **`client_tools.py`**:
     -   **Purpose**: Defines the *Schema* of tools available to the Agent.

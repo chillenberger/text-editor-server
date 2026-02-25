@@ -1,7 +1,7 @@
 import os
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from src.prompts.router import ROUTER_PROMPT
+from src.agents.prompts.router import ROUTER_PROMPT
 
 load_dotenv()
 

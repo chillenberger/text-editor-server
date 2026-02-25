@@ -1,7 +1,7 @@
 import os
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from src.prompts.planner import PLANNER_PROMPT
+from src.agents.prompts.planner import PLANNER_PROMPT
 
 load_dotenv()
 

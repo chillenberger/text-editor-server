@@ -1,5 +1,5 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from src.prompts.base import get_system_prompt
+from src.agents.prompts.base import get_system_prompt
 
 EXECUTOR_CORE_PROMPT = """
 You are the 'Execution Engine' of a decoupled AI assistant. 

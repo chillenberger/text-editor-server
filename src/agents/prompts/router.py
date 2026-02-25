@@ -1,5 +1,5 @@
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from src.prompts.base import get_system_prompt
+from src.agents.prompts.base import get_system_prompt
 
 ROUTER_CORE_PROMPT = """You are an intelligent router.
 Your job is to decide if the user's request requires a formal step-by-step PLAN or if it can be EXECUTED directly.

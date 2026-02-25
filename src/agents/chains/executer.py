@@ -1,7 +1,7 @@
 import os
 from langchain_openai import ChatOpenAI
 from dotenv import load_dotenv
-from src.tools.client_tools import (
+from src.agents.tools.client_tools import (
     change_file_location_tool, 
     get_workspace_structure_tool, 
     create_file_tool, 
@@ -9,7 +9,7 @@ from src.tools.client_tools import (
     read_file_tool,
     propose_file_change_tool
 )
-from src.prompts.executer import EXECUTOR_PROMPT
+from src.agents.prompts.executer import EXECUTOR_PROMPT
 
 load_dotenv()
 
